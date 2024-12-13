@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OperacaoCuriosidadeAPI.Entities;
+using OperacaoCuriosidadeAPI.Models;
 
 namespace OperacaoCuriosidadeAPI.Context
 {
