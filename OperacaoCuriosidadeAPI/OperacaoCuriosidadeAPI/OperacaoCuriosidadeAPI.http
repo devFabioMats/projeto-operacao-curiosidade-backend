@@ -1,0 +1,6 @@
+@OperacaoCuriosidadeAPI_HostAddress = http://localhost:5070
+
+GET {{OperacaoCuriosidadeAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
