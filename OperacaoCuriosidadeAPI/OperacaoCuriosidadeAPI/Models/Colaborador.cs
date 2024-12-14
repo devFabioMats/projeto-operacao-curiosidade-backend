@@ -1,4 +1,4 @@
-﻿namespace OperacaoCuriosidadeAPI.Entities
+﻿namespace OperacaoCuriosidadeAPI.Models
 {
     public class Colaborador
     {
