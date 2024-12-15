@@ -10,5 +10,6 @@ namespace OperacaoCuriosidadeAPI.Context
         {
         }
         public DbSet<Colaborador> Colaboradores { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
