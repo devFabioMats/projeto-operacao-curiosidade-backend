@@ -91,5 +91,19 @@ namespace OperacaoCuriosidadeAPI.Controllers
 
             return NoContent();
         }
+        [HttpPost("Login")]
+        public IActionResult Login([FromBody] LoginModel loginModel)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var usuario = _context.Usuarios.SingleOrDefault(u => u.Email == loginModel.Email && u.Senha == loginModel.Senha);
+            if (usuario == null)
+            {
+                return Unauthorized("Email ou senha inválidos");
+            }
+
+            return Ok("Login bem-sucedido");
+        }
     }
 }
