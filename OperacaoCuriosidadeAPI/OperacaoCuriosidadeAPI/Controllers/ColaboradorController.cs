@@ -16,7 +16,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context = context;
         }
 
-        // POST:  Colaborador
         [HttpPost]
         public IActionResult Create(Colaborador colaborador)
         {
@@ -34,7 +33,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return CreatedAtAction(nameof(ObterPorId), new { id = colaborador.Id }, colaborador);
         }
 
-        // GET: Colaborador
         [HttpGet("{id}")]
         public IActionResult ObterPorId(int id)
         {
@@ -46,7 +44,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return Ok(colaborador);
         }
 
-        // GET por nome: Colaborador/nome
         [HttpGet("ObterPorNome")]
         public IActionResult ObterPorNome(string nome)
         {
@@ -58,7 +55,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return Ok(colaborador);
         }
 
-        // GET todos: Colaborador
         [HttpGet("ObterTodos")]
         public IActionResult ObterTodos()
         {
@@ -66,7 +62,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return Ok(colaboradores);
         }
 
-        // PUT: Colaborador
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Colaborador colaborador)
         {
@@ -101,6 +96,24 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context.SaveChanges();
 
             return NoContent();
+        }
+
+        [HttpGet("Dashboard")]
+        public ActionResult<Dashboard> QuantidadeCadastros()
+        {
+            var cadastros = _context.Colaboradores.ToList();
+            int totalCadastros = cadastros.Count;
+            int cadastrosInativos = cadastros.Count(c => c.Status == false);
+            int cadastrosPendentes = cadastros.Count(c => c.IsPendente);
+
+            Dashboard dashboardInfos = new Dashboard
+            {
+                TotalCadastros = totalCadastros,
+                CadastrosInativos = cadastrosInativos,
+                CadastrosPendentes = cadastrosPendentes
+            };
+
+            return Ok(dashboardInfos);
         }
     }
 }
