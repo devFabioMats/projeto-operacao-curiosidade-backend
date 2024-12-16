@@ -12,5 +12,16 @@ namespace OperacaoCuriosidadeAPI.Context
 
         public DbSet<Colaborador> Colaboradores { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+
+        // metodo que faz a ligação entre as tabelas Usuario e Colaborador
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Usuario>()
+                .HasMany(usuario => usuario.Colaboradores)
+                .WithOne(colaborador => colaborador.Usuario)
+                .HasForeignKey(colaborador => colaborador.UsuarioId);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
