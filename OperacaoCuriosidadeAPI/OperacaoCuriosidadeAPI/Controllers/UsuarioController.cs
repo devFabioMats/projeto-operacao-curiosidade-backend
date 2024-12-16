@@ -58,6 +58,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
         }
 
         // PUT: Colaborador
+        [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Colaborador colaborador)
         {
             var colaboradorBanco = _context.Colaboradores.Find(id);
