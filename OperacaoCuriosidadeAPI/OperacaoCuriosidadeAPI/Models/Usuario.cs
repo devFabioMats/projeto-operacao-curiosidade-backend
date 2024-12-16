@@ -10,5 +10,4 @@
         // Relacionamento com Colaboradores
         public ICollection<Colaborador> Colaboradores { get; set; }
     }
-
 }

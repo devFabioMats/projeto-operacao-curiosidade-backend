@@ -11,6 +11,7 @@
         public string? Interesses { get; set; }
         public string? Sentimentos { get; set; }
         public string? Valores { get; set; }
+
         public bool IsPendente
         {
             get
@@ -24,7 +25,7 @@
 
         // Chave estrangeira para Usuario
         public int UsuarioId { get; set; }
+
         public Usuario Usuario { get; set; }
     }
-
 }
