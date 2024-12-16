@@ -22,7 +22,8 @@ namespace OperacaoCuriosidadeAPI.Controllers
             if (colaborador == null)
                 return BadRequest("Dados inválidos");
 
-            bool existe = _context.Colaboradores.Any(colaborador => colaborador.Nome == colaborador.Nome || colaborador.Email == colaborador.Email);
+            bool existe = _context.Colaboradores.Any(c => c.Nome == colaborador.Nome || c.Email == colaborador.Email);
+
             if (existe)
             {
                 return BadRequest("Colaborador já cadastrado");
@@ -47,7 +48,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
         [HttpGet("ObterPorNome")]
         public IActionResult ObterPorNome(string nome)
         {
-            var colaborador = _context.Colaboradores.Where(colaborador => colaborador.Nome.Contains(nome));
+            var colaborador = _context.Colaboradores.Where(c => c.Nome.Contains(nome));
             if (colaborador == null)
             {
                 return NotFound("Não encontrado");
@@ -103,8 +104,8 @@ namespace OperacaoCuriosidadeAPI.Controllers
         {
             var cadastros = _context.Colaboradores.ToList();
             int totalCadastros = cadastros.Count;
-            int cadastrosInativos = cadastros.Count(colaborador => colaborador.Status == false);
-            int cadastrosPendentes = cadastros.Count(colaborador => colaborador.IsPendente);
+            int cadastrosInativos = cadastros.Count(c => c.Status == false);
+            int cadastrosPendentes = cadastros.Count(c => c.IsPendente);
 
             Dashboard dashboardInfos = new Dashboard
             {

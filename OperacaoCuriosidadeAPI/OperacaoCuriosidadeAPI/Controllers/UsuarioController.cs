@@ -21,7 +21,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
             if (usuario == null)
                 return BadRequest("Dados inválidos");
 
-            bool existe = _context.Usuarios.Any(usuario => usuario.Nome == usuario.Nome || usuario.Email == usuario.Email);
+            bool existe = _context.Usuarios.Any(u => u.Nome == usuario.Nome || u.Email == usuario.Email);
             if (existe)
             {
                 return BadRequest("Usuário já cadastrado");
@@ -46,7 +46,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
         [HttpGet("ObterPorNome")]
         public IActionResult ObterPorNome(string nome)
         {
-            var usuarios = _context.Usuarios.Where(usuario => usuario.Nome.Contains(nome)).ToList();
+            var usuarios = _context.Usuarios.Where(u => u.Nome.Contains(nome)).ToList();
             if (usuarios == null || !usuarios.Any())
             {
                 return NotFound("Não encontrado");
@@ -98,7 +98,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var usuario = _context.Usuarios.SingleOrDefault(usuario => usuario.Email == login.Email && usuario.Senha == login.Senha);
+            var usuario = _context.Usuarios.SingleOrDefault(u => u.Email == login.Email && u.Senha == login.Senha);
             if (usuario == null)
             {
                 return Unauthorized("Email ou senha inválidos");
