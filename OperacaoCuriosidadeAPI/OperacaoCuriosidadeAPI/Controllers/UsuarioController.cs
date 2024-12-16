@@ -80,5 +80,18 @@ namespace OperacaoCuriosidadeAPI.Controllers
 
             return Ok(colaboradorBanco);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Deletar(int id)
+        {
+            var colaboradorBanco = _context.Colaboradores.Find(id);
+            if (colaboradorBanco == null)
+                return NotFound();
+
+            _context.Colaboradores.Remove(colaboradorBanco);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
