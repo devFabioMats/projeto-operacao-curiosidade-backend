@@ -11,7 +11,6 @@
         public string? Interesses { get; set; }
         public string? Sentimentos { get; set; }
         public string? Valores { get; set; }
-
         public bool IsPendente
         {
             get
@@ -22,5 +21,10 @@
                        string.IsNullOrEmpty(Valores);
             }
         }
+
+        // Chave estrangeira para Usuario
+        public int UsuarioId { get; set; }
+        public Usuario Usuario { get; set; }
     }
+
 }
