@@ -22,10 +22,5 @@
                        string.IsNullOrEmpty(Valores);
             }
         }
-
-        // Chave estrangeira para Usuario
-        public int UsuarioId { get; set; }
-
-        public Usuario Usuario { get; set; }
     }
 }
