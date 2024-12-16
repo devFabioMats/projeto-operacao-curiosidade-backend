@@ -32,8 +32,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context.Add(colaborador);
             _context.SaveChanges();
             return CreatedAtAction(nameof(ObterPorId), new { id = colaborador.Id }, colaborador);
-
-
         }
 
         // GET: Colaborador

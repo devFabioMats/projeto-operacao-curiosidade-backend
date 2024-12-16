@@ -9,6 +9,7 @@ namespace OperacaoCuriosidadeAPI.Context
         public OperacaoCuriosidadeContext(DbContextOptions<OperacaoCuriosidadeContext> options) : base(options)
         {
         }
+
         public DbSet<Colaborador> Colaboradores { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
     }
