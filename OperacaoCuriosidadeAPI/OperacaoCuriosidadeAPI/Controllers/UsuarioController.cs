@@ -36,5 +36,27 @@ namespace OperacaoCuriosidadeAPI.Controllers
             }
             return Ok(colaborador);
         }
+
+        // GET por nome: Colaborador/nome
+        [HttpGet("ObterPorNome")]
+        public IActionResult ObterPorNome(string nome)
+        {
+            var colaborador = _context.Colaboradores.Where(c => c.Nome.Contains(nome));
+            if (colaborador == null)
+            {
+                return NotFound();
+            }
+            return Ok(colaborador);
+        }
+
+        // GET todos: Colaborador
+        [HttpGet("ObeterTodos")]
+        public IActionResult ObterTodos()
+        {
+            var colaboradores = _context.Colaboradores;
+            return Ok(colaboradores);
+        }
+
+
     }
 }
