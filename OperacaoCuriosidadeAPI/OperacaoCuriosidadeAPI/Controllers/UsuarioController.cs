@@ -50,13 +50,34 @@ namespace OperacaoCuriosidadeAPI.Controllers
         }
 
         // GET todos: Colaborador
-        [HttpGet("ObeterTodos")]
+        [HttpGet("ObterTodos")]
         public IActionResult ObterTodos()
         {
             var colaboradores = _context.Colaboradores;
             return Ok(colaboradores);
         }
 
+        // PUT: Colaborador
+        public IActionResult Atualizar(int id, Colaborador colaborador)
+        {
+            var colaboradorBanco = _context.Colaboradores.Find(id);
 
+            if (colaboradorBanco == null)
+                return NotFound();
+
+            colaboradorBanco.Status = colaborador.Status;
+            colaboradorBanco.Nome = colaborador.Nome;
+            colaboradorBanco.Idade = colaborador.Idade;
+            colaboradorBanco.Email = colaborador.Email;
+            colaboradorBanco.Endereco = colaborador.Endereco;
+            colaboradorBanco.Interesses = colaborador.Interesses;
+            colaboradorBanco.Sentimentos = colaborador.Sentimentos;
+            colaboradorBanco.Valores = colaborador.Valores;
+
+            _context.Colaboradores.Update(colaboradorBanco);
+            _context.SaveChanges();
+
+            return Ok(colaboradorBanco);
+        }
     }
 }
