@@ -10,7 +10,7 @@ namespace OperacaoCuriosidadeAPI.Models
         public bool Status { get; set; }
 
         [Required(ErrorMessage = "O campo Nome é obrigatório.")]
-        public string? Nome { get; set; }
+        public string Nome { get; set; }
 
         [Required(ErrorMessage = "O campo Idade é obrigatório.")]
         [Range(18, 100, ErrorMessage = "A idade deve estar entre 18 e 100 anos.")]
