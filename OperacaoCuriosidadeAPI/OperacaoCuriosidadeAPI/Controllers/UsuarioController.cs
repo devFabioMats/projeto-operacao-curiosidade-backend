@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OperacaoCuriosidadeAPI.Context;
 using OperacaoCuriosidadeAPI.Models;
+using OperacaoCuriosidadeAPI.Services;
 
 namespace OperacaoCuriosidadeAPI.Controllers
 {
@@ -92,6 +93,21 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return NoContent();
         }
 
+        //[HttpPost("Login")]
+        //public IActionResult Login([FromBody] Login login)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    var usuario = _context.Usuarios.SingleOrDefault(u => u.Email == login.Email && u.Senha == login.Senha);
+        //    if (usuario == null)
+        //    {
+        //        return Unauthorized("Email ou senha inválidos");
+        //    }
+
+        //    return Ok("Login bem-sucedido");
+        //}
+
         [HttpPost("Login")]
         public IActionResult Login([FromBody] Login login)
         {
@@ -99,12 +115,12 @@ namespace OperacaoCuriosidadeAPI.Controllers
                 return BadRequest(ModelState);
 
             var usuario = _context.Usuarios.SingleOrDefault(u => u.Email == login.Email && u.Senha == login.Senha);
-            if (usuario == null)
-            {
-                return Unauthorized("Email ou senha inválidos");
-            }
 
-            return Ok("Login bem-sucedido");
+            if (usuario == null)
+                return Unauthorized("Email ou senha inválidos");
+
+            var token = TokenService.GeradorToken(new Models.Usuario());
+            return Ok(token);
         }
     }
 }
