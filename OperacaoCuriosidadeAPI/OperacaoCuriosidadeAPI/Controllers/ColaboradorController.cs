@@ -25,9 +25,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
             bool existe = _context.Colaboradores.Any(c => c.Nome == colaborador.Nome || c.Email == colaborador.Email);
 
             if (existe)
-            {
                 return BadRequest("Colaborador já cadastrado");
-            }
 
             _context.Add(colaborador);
             _context.SaveChanges();
@@ -50,9 +48,8 @@ namespace OperacaoCuriosidadeAPI.Controllers
         {
             var colaborador = _context.Colaboradores.Where(c => c.Nome.Contains(nome));
             if (colaborador == null)
-            {
                 return NotFound("Não encontrado");
-            }
+
             return Ok(colaborador);
         }
 
@@ -66,6 +63,13 @@ namespace OperacaoCuriosidadeAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Colaborador colaborador)
         {
+            if (colaborador == null)
+                return BadRequest("Dados inválidos");
+
+            bool existe = _context.Colaboradores.Any(c => c.Nome == colaborador.Nome || c.Email == colaborador.Email);
+            if (existe)
+                return BadRequest("Colaborador já cadastrado");
+
             var colaboradorBanco = _context.Colaboradores.Find(id);
 
             if (colaboradorBanco == null)
