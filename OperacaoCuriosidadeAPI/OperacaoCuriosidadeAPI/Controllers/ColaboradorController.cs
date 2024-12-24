@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OperacaoCuriosidadeAPI.Context;
 using OperacaoCuriosidadeAPI.Models;
 
@@ -17,7 +16,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context = context;
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult Create(Colaborador colaborador)
         {
@@ -34,7 +32,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return CreatedAtAction(nameof(ObterPorId), new { id = colaborador.Id }, colaborador);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public IActionResult ObterPorId(int id)
         {
@@ -46,7 +43,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return Ok(colaborador);
         }
 
-        [Authorize]
         [HttpGet("ObterPorNome")]
         public IActionResult ObterPorNome(string nome)
         {
@@ -57,7 +53,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return Ok(colaborador);
         }
 
-        [Authorize]
         [HttpGet("ObterTodos")]
         public IActionResult ObterTodos()
         {
@@ -65,7 +60,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return Ok(colaboradores);
         }
 
-        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Atualizar(int id, Colaborador colaborador)
         {
@@ -96,7 +90,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return Ok(colaboradorBanco);
         }
 
-        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
         {
@@ -110,7 +103,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpGet("Dashboard")]
         public ActionResult<Dashboard> QuantidadeCadastros()
         {
