@@ -66,9 +66,9 @@ namespace OperacaoCuriosidadeAPI.Controllers
             if (colaborador == null)
                 return BadRequest("Dados inválidos");
 
-            bool existe = _context.Colaboradores.Any(c => c.Nome == colaborador.Nome || c.Email == colaborador.Email);
-            if (existe)
-                return BadRequest("Colaborador já cadastrado");
+            //bool existe = _context.Colaboradores.Any(c => c.Nome == colaborador.Nome || c.Email == colaborador.Email);
+            //if (existe)
+            //    return BadRequest("Colaborador já cadastrado");
 
             var colaboradorBanco = _context.Colaboradores.Find(id);
 
