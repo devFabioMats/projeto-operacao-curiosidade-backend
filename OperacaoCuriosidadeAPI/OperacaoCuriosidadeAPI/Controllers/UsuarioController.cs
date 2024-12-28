@@ -11,7 +11,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
     {
         private readonly OperacaoCuriosidadeContext _context;
         private static readonly Dictionary<string, int> tentativas = new Dictionary<string, int>();
-        private static readonly Dictionary<string, DateTime> ultimaTentativa = new Dictionary<string, DateTime>();
+        private static readonly Dictionary<string, DateTime> horaUltimaTentativa = new Dictionary<string, DateTime>();
         private const int TentativasLimite = 3;
         private static readonly TimeSpan DuracaoBloqueio = TimeSpan.FromMinutes(1);
 
@@ -29,18 +29,17 @@ namespace OperacaoCuriosidadeAPI.Controllers
             if (!tentativas.ContainsKey(login.Email))
             {
                 tentativas[login.Email] = 0;
-                ultimaTentativa[login.Email] = DateTime.UtcNow;
+                horaUltimaTentativa[login.Email] = DateTime.UtcNow;
             }
 
             if (tentativas[login.Email] >= TentativasLimite)
             {
-                if (DateTime.UtcNow - ultimaTentativa[login.Email] < DuracaoBloqueio)
+                if (DateTime.UtcNow - horaUltimaTentativa[login.Email] < DuracaoBloqueio)
                 {
                     return StatusCode(429, "Muitas tentativas de login. Tente novamente mais tarde.");
                 }
                 else
                 {
-                    // Reset login attempts after lockout duration
                     tentativas[login.Email] = 0;
                 }
             }
@@ -50,11 +49,10 @@ namespace OperacaoCuriosidadeAPI.Controllers
             if (usuario == null)
             {
                 tentativas[login.Email]++;
-                ultimaTentativa[login.Email] = DateTime.UtcNow;
+                horaUltimaTentativa[login.Email] = DateTime.UtcNow;
                 return Unauthorized("Email ou senha inválidos");
             }
 
-            // Reset login attempts after successful login
             tentativas[login.Email] = 0;
 
             var token = TokenService.GeradorToken(usuario);
