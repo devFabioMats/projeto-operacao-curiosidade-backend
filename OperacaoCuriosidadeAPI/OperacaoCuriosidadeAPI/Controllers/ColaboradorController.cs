@@ -8,7 +8,6 @@ namespace OperacaoCuriosidadeAPI.Controllers
     [Route("oc-api/[controller]")]
     public class ColaboradorController : ControllerBase
     {
-        // declarando um campo privado e somente leitura chamado _context do tipo OperacaoCuriosidadeContext.
         private readonly OperacaoCuriosidadeContext _context;
 
         public ColaboradorController(OperacaoCuriosidadeContext context)
@@ -66,14 +65,14 @@ namespace OperacaoCuriosidadeAPI.Controllers
             if (colaborador == null)
                 return BadRequest("Dados inválidos");
 
-            //bool existe = _context.Colaboradores.Any(c => c.Nome == colaborador.Nome || c.Email == colaborador.Email);
-            //if (existe)
-            //    return BadRequest("Colaborador já cadastrado");
-
             var colaboradorBanco = _context.Colaboradores.Find(id);
 
             if (colaboradorBanco == null)
                 return NotFound();
+
+            bool existe = _context.Colaboradores.Any(c => (c.Email == colaborador.Email || c.Nome == colaborador.Nome) && c.Id != id);
+            if (existe)
+                return BadRequest("Outro colaborador já cadastrado com o mesmo nome ou email");
 
             colaboradorBanco.Status = colaborador.Status;
             colaboradorBanco.Nome = colaborador.Nome;
