@@ -1,6 +1,6 @@
-﻿namespace OperacaoCuriosidadeAPI.Logs
+﻿namespace OperacaoCuriosidadeAPI.Services
 {
-    public class Log
+    public class LogService
     {
         public void LogParaArquivo(string titulo, string mensagemLog)
         {
