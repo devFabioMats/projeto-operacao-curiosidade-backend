@@ -15,7 +15,8 @@ namespace OperacaoCuriosidadeAPI.Services
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
                 {
-                    new Claim("idUsuario", usuario.Id.ToString())
+                    new Claim("idUsuario", usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.Nome)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
