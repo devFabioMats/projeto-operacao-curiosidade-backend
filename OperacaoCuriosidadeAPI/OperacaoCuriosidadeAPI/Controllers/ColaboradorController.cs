@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OperacaoCuriosidadeAPI.Context;
 using OperacaoCuriosidadeAPI.Models;
+using OperacaoCuriosidadeAPI.Services;
 
 namespace OperacaoCuriosidadeAPI.Controllers
 {
@@ -9,25 +10,32 @@ namespace OperacaoCuriosidadeAPI.Controllers
     public class ColaboradorController : ControllerBase
     {
         private readonly OperacaoCuriosidadeContext _context;
+        private readonly LogService _logService;
 
-        public ColaboradorController(OperacaoCuriosidadeContext context)
+        public ColaboradorController(OperacaoCuriosidadeContext context, LogService logService)
         {
             _context = context;
+            _logService = logService;
         }
 
         [HttpPost]
         public IActionResult Create(Colaborador colaborador)
         {
             if (colaborador == null)
+            {
                 return BadRequest("Dados inválidos");
+            }
 
             bool existe = _context.Colaboradores.Any(c => c.Nome == colaborador.Nome || c.Email == colaborador.Email);
 
             if (existe)
+            {
                 return BadRequest("Colaborador já cadastrado");
+            }
 
             _context.Add(colaborador);
             _context.SaveChanges();
+            _logService.LogParaArquivo("Cadastrar", $"Administrador {User.Identity.Name} cadastrou o colaborador {colaborador.Nome}.");
             return CreatedAtAction(nameof(ObterPorId), new { id = colaborador.Id }, colaborador);
         }
 
@@ -45,11 +53,13 @@ namespace OperacaoCuriosidadeAPI.Controllers
         [HttpGet("ObterPorNome")]
         public IActionResult ObterPorNome(string nome)
         {
-            var colaborador = _context.Colaboradores.Where(c => c.Nome.Contains(nome));
-            if (colaborador == null)
+            var colaboradores = _context.Colaboradores.Where(c => c.Nome.Contains(nome));
+            if (colaboradores == null)
+            {
                 return NotFound("Não encontrado");
+            }
 
-            return Ok(colaborador);
+            return Ok(colaboradores);
         }
 
         [HttpGet("ObterTodos")]
@@ -86,7 +96,21 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context.Colaboradores.Update(colaboradorBanco);
             _context.SaveChanges();
 
+            _logService.LogParaArquivo("Alterar Dados", $"Administrador {User.Identity.Name} atualizou o colaborador com ID {id}.");
             return Ok(colaboradorBanco);
+        }
+
+        [HttpGet("DownloadLog")]
+        public IActionResult DownloadLog()
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "30122024.txt");
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("Arquivo de log não encontrado.");
+            }
+
+            var bytes = System.IO.File.ReadAllBytes(filePath);
+            return File(bytes, "application/octet-stream", "30122024.txt");
         }
 
         [HttpDelete("{id}")]
@@ -99,6 +123,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context.Colaboradores.Remove(colaboradorBanco);
             _context.SaveChanges();
 
+            _logService.LogParaArquivo("Deletar", $"Administrador {User.Identity.Name} deletou o colaborador com ID {id}.");
             return NoContent();
         }
 

@@ -10,18 +10,20 @@ namespace OperacaoCuriosidadeAPI.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly OperacaoCuriosidadeContext _context;
+        private readonly LogService _logService;
         private static readonly Dictionary<string, int> tentativas = new Dictionary<string, int>();
         private static readonly Dictionary<string, DateTime> horaUltimaTentativa = new Dictionary<string, DateTime>();
         private const int TentativasLimite = 3;
         private static readonly TimeSpan DuracaoBloqueio = TimeSpan.FromMinutes(1);
 
-        public UsuarioController(OperacaoCuriosidadeContext context)
+        public UsuarioController(OperacaoCuriosidadeContext context, LogService logService)
         {
             _context = context;
+            _logService = logService;
         }
 
         [HttpPost("Login")]
-        public IActionResult Login(Login login)
+        public IActionResult Login([FromBody] Login login)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -73,6 +75,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
 
             _context.Add(usuario);
             _context.SaveChanges();
+            _logService.LogParaArquivo("Cadastrar", $"Administrador {User.Identity.Name} cadastrou administrador {usuario.Nome} criado com sucesso.");
             return CreatedAtAction(nameof(ObterPorId), new { id = usuario.Id }, usuario);
         }
 
@@ -95,6 +98,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
             {
                 return NotFound("Não encontrado");
             }
+
             return Ok(usuarios);
         }
 
@@ -110,6 +114,10 @@ namespace OperacaoCuriosidadeAPI.Controllers
         {
             var usuarioBanco = _context.Usuarios.Find(id);
 
+            bool existe = _context.Usuarios.Any(u => (u.Email == usuario.Email || u.Nome == usuario.Nome) && u.Id != id);
+            if (existe)
+                return BadRequest("Outro administrador já cadastrado com o mesmo nome ou email");
+
             if (usuarioBanco == null)
                 return NotFound();
 
@@ -120,6 +128,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context.Usuarios.Update(usuarioBanco);
             _context.SaveChanges();
 
+            _logService.LogParaArquivo("Alterar", $"Administrador {User.Identity.Name} atualizou o administrador com ID {id}.");
             return Ok(usuarioBanco);
         }
 
@@ -133,6 +142,7 @@ namespace OperacaoCuriosidadeAPI.Controllers
             _context.Usuarios.Remove(usuarioBanco);
             _context.SaveChanges();
 
+            _logService.LogParaArquivo("Deletar", $"Administrador {User.Identity.Name} deletou o administrador com ID {id}.");
             return NoContent();
         }
     }
