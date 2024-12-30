@@ -20,8 +20,8 @@
             swLog.WriteLine("Log:");
             swLog.WriteLine($"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}");
 
-            swLog.WriteLine($"Título da Mensagem: {titulo}");
-            swLog.WriteLine($"Mensagem: {mensagemLog}");
+            swLog.WriteLine($"Ação: {titulo}");
+            swLog.WriteLine($"Descrição: {mensagemLog}");
 
             swLog.WriteLine("-------------------------------");
             swLog.WriteLine("");
