@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OperacaoCuriosidadeAPI.Context;
 using OperacaoCuriosidadeAPI.Models;
+using OperacaoCuriosidadeAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +32,10 @@ builder.Services.AddSwaggerGen(c =>
     {
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "Insira o token JWT no formato: Bearer {seu token}"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement()
@@ -68,9 +71,13 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateAudience = false,
+        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
     };
 });
+
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<LogService>();
 
 var app = builder.Build();
 
@@ -81,12 +88,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseHttpsRedirection();
 app.UseCors("PermitirTudo");
-
 app.MapControllers();
-
 app.Run();
